@@ -37,8 +37,8 @@ void setup() {
   while (!Serial);  //wait for serial
 
   Serial.println("Wait for setup...");
-  InitADC();
   InitSD();
+  InitADC();
   Serial.println("Setup done!");
 
   Serial.print("Size of backlog: ");
@@ -59,11 +59,13 @@ void loop() {
     digitalWrite(CS_ADC, HIGH);
     digitalWrite(CS_SD, LOW);
 
+    if(!SD.begin(CS_SD)) {Serial.println("Failed to init SD.");}
+    Serial.print("Writing to SD card...");
     WriteToSD();
+    Serial.println("Successfully written to SD card");
     
     digitalWrite(CS_SD, HIGH);
     digitalWrite(CS_ADC, LOW);
-    Serial.println("Successfully written to SD card");
     reset();
     //interrupts();
     attachInterrupt(digitalPinToInterrupt(ISR_SOUND_PIN), ISR_SOUND, RISING);

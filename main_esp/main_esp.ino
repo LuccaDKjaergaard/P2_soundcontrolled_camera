@@ -57,6 +57,7 @@ void loop() {
     detachInterrupt(digitalPinToInterrupt(ISR_TIMER_PIN));
     detachInterrupt(digitalPinToInterrupt(ISR_SOUND_PIN));
     digitalWrite(CS_ADC, HIGH);
+    SPI.endTransaction();
     digitalWrite(CS_SD, LOW);
 
     if(!SD.begin(CS_SD)) {Serial.println("Failed to init SD.");}
@@ -65,6 +66,7 @@ void loop() {
     Serial.println("Successfully written to SD card");
     
     digitalWrite(CS_SD, HIGH);
+    SPI.beginTransaction(SPISettings(1600000, MSBFIRST, SPI_MODE0));
     digitalWrite(CS_ADC, LOW);
     reset();
     //interrupts();

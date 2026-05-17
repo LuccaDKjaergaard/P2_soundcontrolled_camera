@@ -12,7 +12,7 @@ void ISR_SOUND() {
 void ISR_TIMER() {
   if (soundDetected) {
     if (frontlogCnt < FRONTLOGSIZE) {
-      frontlog[frontlogCnt] = ADCFrontLog();
+      frontlog[frontlogCnt] = ReadADC();
       frontlogCnt++;
     } else if (frontlogCnt >= FRONTLOGSIZE) {
       writeToSD = true;
@@ -22,7 +22,7 @@ void ISR_TIMER() {
     if(backlogCnt >= BACKLOGSIZE) {
       backlogCnt = 0;
     }
-    backlog[backlogCnt] = ADCBackLog();
+    backlog[backlogCnt] = ReadADC();
     backlogCnt++;
   }
 }

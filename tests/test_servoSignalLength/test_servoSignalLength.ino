@@ -1,37 +1,39 @@
+const int PIN_TIMER = 3;
+const int LOOPS = 100;
+
 int valueRight = 400;
-int valueMiddle = 1400;
 int valueLeft = 2400;
+int valueMiddle = ((valueRight + valueLeft) / 2);
 
 void setup() {}
 
 void setup1() {
-  pinMode(3, OUTPUT);
+  pinMode(PIN_TIMER, OUTPUT);
 }
 
 void loop() {}
 
 void loop1() {
-  for(int i = 0; i < 100; i++) {
-    digitalWrite(3, HIGH);
+  for(int i = 0; i < LOOPS; i++) {
+    digitalWrite(PIN_TIMER, HIGH);
     delayMicroseconds(valueRight);
-    digitalWrite(3, LOW);
-    delay(18);
-    delayMicroseconds(2000 - valueRight);
+    digitalWrite(PIN_TIMER, LOW);
+    delay(17);
+    delayMicroseconds(3000 - valueRight);
   }
   
-  for(int i = 0; i < 100; i++) {
-    digitalWrite(3, HIGH);
+  for(int i = 0; i < LOOPS; i++) {
+    digitalWrite(PIN_TIMER, HIGH);
     delayMicroseconds(valueMiddle);
-    digitalWrite(3, LOW);
-    delay(18);
-    delayMicroseconds(2000 - valueMiddle);
+    digitalWrite(PIN_TIMER, LOW);
+    delay(17);
+    delayMicroseconds(3000 - valueMiddle);
   }
 
-  
-  for(int i = 0; i < 100; i++) {
-    digitalWrite(3, HIGH);
+  for(int i = 0; i < LOOPS; i++) {
+    digitalWrite(PIN_TIMER, HIGH);
     delayMicroseconds(valueLeft);
-    digitalWrite(3, LOW);
+    digitalWrite(PIN_TIMER, LOW);
     delay(17);
     delayMicroseconds(3000 - valueLeft);
   }

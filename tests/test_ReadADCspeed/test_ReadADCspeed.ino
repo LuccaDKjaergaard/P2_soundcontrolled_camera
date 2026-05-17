@@ -68,16 +68,16 @@ void loop() {
     attachInterrupt(digitalPinToInterrupt(PIN_ISR_TIMER), ISR_TIMER, RISING);
   }*/
 
-  double LOOPS = 1000.0;
+  double LOOPS = 40000.0;
   unsigned long startTime = millis();
   for(int i = 0; i < LOOPS; i++) {
-    backlog[i] = ReadADC();
+    ISR_TIMER();
   }
   unsigned long stopTime = millis();
   unsigned long totalTime = stopTime - startTime;
   double loopTime = totalTime / LOOPS;
   Serial.print("Total time: "); Serial.print(totalTime); Serial.print("ms, ");
-  Serial.print("Loop time: "); Serial.print(loopTime); Serial.println("ms.");
+  Serial.print("Loop time: "); Serial.print(loopTime, 4); Serial.println("ms.");
 }
 
 void reset() {

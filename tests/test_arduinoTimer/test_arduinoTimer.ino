@@ -31,15 +31,9 @@ void setup() {
   setupTimer1();
 }
 
-void loop() {
-}
+void loop() {}
 
 ISR(TIMER1_COMPA_vect) {
-  if(state) {
-    digitalWrite(PIN_TIMER, HIGH);
-    state = false;
-  } else if(!state) {
-    digitalWrite(PIN_TIMER, LOW);
-    state = true;
-  }
+  digitalWrite(PIN_TIMER, state);
+  state = state^1;
 }

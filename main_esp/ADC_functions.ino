@@ -5,7 +5,9 @@ void InitADC() {
 
   //initialise SPI with manually configured pins:
   SPI.begin(CLKpin, MISOpin, MOSIpin, CS_ADC);
-  //SPI.beginTransaction(SPISettings(1600000, MSBFIRST, SPI_MODE0));
+  Serial.print("Waiting for ADC init...");
+  SPI.beginTransaction(SPISettings(1600000, MSBFIRST, SPI_MODE0));
+  Serial.println("ADC init done!");
 }
 
 uint16_t ADCFrontLog() {
@@ -22,8 +24,10 @@ uint16_t ADCFrontLog() {
 
   // Align to 12-bit
   adcValue = (adcValue >> 1) & 0x0FFF;
-  Serial.print("To frontLog: ");
-  Serial.println(adcValue);
+
+  //debug serial prints overflow the core...
+  //Serial.print("To frontLog: ");
+  //Serial.println(adcValue);
   return adcValue;
 }
 
@@ -42,7 +46,8 @@ uint16_t ADCBackLog() {
   // Align to 12-bit
   adcValue = (adcValue >> 1) & 0x0FFF;
 
-  Serial.print("To backLog: ");
-  Serial.println(adcValue);
+  //debug serial prints overflow the core...
+  //Serial.print("To backLog: ");
+  //Serial.println(adcValue);
   return adcValue;
 }

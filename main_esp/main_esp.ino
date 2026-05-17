@@ -16,8 +16,8 @@
 #define ISR_TIMER_PIN 5  //D2
 #define ISR_SOUND_PIN 6  //D3
 
-#define BACKLOGSIZE 20000
-#define FRONTLOGSIZE 40000
+#define BACKLOGSIZE 20
+#define FRONTLOGSIZE 40
 
 //also create directory(?) for each day (can be done using __DATE__)
 #define PATH "/adc_out.txt" //should be changed to something more time-specific
@@ -38,8 +38,8 @@ void setup() {
   while (!Serial);  //wait for serial
 
   Serial.println("Wait for setup...");
-  InitADC();
   InitSD();
+  InitADC();
   Serial.println("Setup done!");
 
   Serial.print("Size of backlog: ");
@@ -55,16 +55,21 @@ void setup() {
 void loop() {
   if (writeToSD) {
     //noInterrupts();
+    //order of functions is important here...
     detachInterrupt(digitalPinToInterrupt(ISR_TIMER_PIN));
     detachInterrupt(digitalPinToInterrupt(ISR_SOUND_PIN));
     digitalWrite(CS_ADC, HIGH);
+    SPI.endTransaction();
+    if(!SD.begin(CS_SD)) {Serial.println("Failed to init SD.");}
     digitalWrite(CS_SD, LOW);
 
+    Serial.print("Writing to SD card...");
     WriteToSD();
+    Serial.println("Successfully written to SD card");
     
     digitalWrite(CS_SD, HIGH);
+    SPI.beginTransaction(SPISettings(1600000, MSBFIRST, SPI_MODE0));
     digitalWrite(CS_ADC, LOW);
-    Serial.println("Successfully written to SD card");
     reset();
     //interrupts();
     attachInterrupt(digitalPinToInterrupt(ISR_SOUND_PIN), ISR_SOUND, RISING);

@@ -4,25 +4,33 @@
 
 #include <SPI.h>
 
+//Split up the 2 possible SPI connections
+SPIClass spi2(FSPI); //ADC SPI class
+SPIClass spi3(HSPI); //SD SPI class
+
 //GPIO Pins Waveshare ESP32-S3-Nano or ESP32-S3-zero
-#define PIN_CS_ADC 21   //D10
-#define PIN_CS_SD 18  //D9
+//SD card
+#define PIN_CS_SD 21   //D10
 #define PIN_CLK 48   //D13
 #define PIN_MISO 47  //D12
 #define PIN_MOSI 38  //D11
+//MCP3201-C
+#define PIN_CS_ADC 18  //D9
+#define PIN_MISO_ADC 17 //D8
+#define PIN_CLK_ADC 10 //D7
+#define PIN_MOSI_ADC 9 //
 
 #define PIN_ISR_TIMER 5  //D2
 #define PIN_ISR_SOUND 6  //D3
 
-#define BACKLOGSIZE 20000
-#define FRONTLOGSIZE 40000
-//volatile because they are changed by ISR:
-volatile uint16_t backlog[BACKLOGSIZE]; //must be same size as what ReadADC() returns
-volatile uint16_t frontlog[FRONTLOGSIZE]; //must be same size as what ReadADC() returns
-volatile unsigned int backlogCnt = 0;
-volatile unsigned int frontlogCnt = 0;
+#define BACKLOGSIZE 2000 //20000
+#define FRONTLOGSIZE 4000 //40000
+uint16_t backlog[BACKLOGSIZE]; //must be same size as what ReadADC() returns
+uint16_t frontlog[FRONTLOGSIZE]; //must be same size as what ReadADC() returns
+unsigned int backlogCnt = 0;
+unsigned int frontlogCnt = 0;
 
-//volatile because they are changed by ISR:
+//volatile because they are changed by ISR
 volatile bool soundDetected = false;
 volatile bool writeToSD = false;
 
@@ -53,8 +61,8 @@ void loop() {
     detachInterrupt(digitalPinToInterrupt(PIN_ISR_TIMER));
     detachInterrupt(digitalPinToInterrupt(PIN_ISR_SOUND));
     digitalWrite(PIN_CS_ADC, HIGH);
-    SPI.endTransaction();
-    if(!SD.begin(PIN_CS_SD)) {Serial.println("Failed to init SD.");}
+    spi2.endTransaction();
+    if(!SD.begin(PIN_CS_SD, spi3)) {Serial.println("Failed to init SD.");}
     digitalWrite(PIN_CS_SD, LOW);
 
     Serial.print("Writing to SD card...");
@@ -62,8 +70,7 @@ void loop() {
     Serial.println("Successfully written to SD card");
     
     digitalWrite(PIN_CS_SD, HIGH);
-    SPI.beginTransaction(SPISettings(1600000, MSBFIRST, SPI_MODE0));
-    //SPI.beginTransaction(SPISettings(1600000, MSBFIRST, SPI_MODE3));
+    spi2.beginTransaction(SPISettings(1600000, MSBFIRST, SPI_MODE0));
     digitalWrite(PIN_CS_ADC, LOW);
     reset();
     attachInterrupt(digitalPinToInterrupt(PIN_ISR_SOUND), ISR_SOUND, RISING);

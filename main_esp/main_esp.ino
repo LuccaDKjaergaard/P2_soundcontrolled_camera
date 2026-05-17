@@ -16,8 +16,8 @@
 #define ISR_TIMER_PIN 5  //D2
 #define ISR_SOUND_PIN 6  //D3
 
-#define BACKLOGSIZE 20000
-#define FRONTLOGSIZE 40000
+#define BACKLOGSIZE 20
+#define FRONTLOGSIZE 40
 
 #define PATH "/adc_out.txt" //should be changed to something more time-specific
 
@@ -54,13 +54,14 @@ void setup() {
 void loop() {
   if (writeToSD) {
     //noInterrupts();
+    //order of functions is important here...
     detachInterrupt(digitalPinToInterrupt(ISR_TIMER_PIN));
     detachInterrupt(digitalPinToInterrupt(ISR_SOUND_PIN));
     digitalWrite(CS_ADC, HIGH);
     SPI.endTransaction();
+    if(!SD.begin(CS_SD)) {Serial.println("Failed to init SD.");}
     digitalWrite(CS_SD, LOW);
 
-    if(!SD.begin(CS_SD)) {Serial.println("Failed to init SD.");}
     Serial.print("Writing to SD card...");
     WriteToSD();
     Serial.println("Successfully written to SD card");

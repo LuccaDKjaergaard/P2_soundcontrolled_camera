@@ -5,9 +5,9 @@ void InitSD() {
 
   //initialise SPI with manually configured pins:
   SPI.begin(CLKpin, MISOpin, MOSIpin, CS_SD);
-  Serial.print("Waiting for SD init...");
-  if(!SD.begin(CS_SD)) {Serial.println("Failed to init SD.");}
-  Serial.println("SD init done!");
+  //Serial.print("Waiting for SD init...");
+  //if(!SD.begin(CS_SD)) {Serial.println("Failed to init SD.");}
+  //Serial.println("SD init done!");
 }
 
 void WriteToSD() {

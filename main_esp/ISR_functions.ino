@@ -3,7 +3,6 @@ void ISR_SOUND() {
 }
 
 void ISR_TIMER() {
-
   if (soundDetected) {
     if (frontlogCnt < FRONTLOGSIZE) {
       frontlog[frontlogCnt] = ADCFrontLog();
@@ -13,10 +12,10 @@ void ISR_TIMER() {
       Serial.println("writeToSD = true");
     }
   } else if (!soundDetected) {
-    if (backlogCnt < BACKLOGSIZE) {
-      backlog[backlogCnt] = ADCBackLog();
-      backlogCnt++;
+    if(backlogCnt >= BACKLOGSIZE) {
+      backlogCnt = 0;
     }
-    //Todo: fix overflow
+    backlog[backlogCnt] = ADCBackLog();
+    backlogCnt++;
   }
 }

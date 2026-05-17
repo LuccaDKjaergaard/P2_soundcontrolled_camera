@@ -19,6 +19,7 @@
 #define BACKLOGSIZE 20
 #define FRONTLOGSIZE 40
 
+//also create directory(?) for each day (can be done using __DATE__)
 #define PATH "/adc_out.txt" //should be changed to something more time-specific
 
 //DEBUG (working):

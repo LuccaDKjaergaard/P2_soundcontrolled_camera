@@ -5,30 +5,27 @@
 #include <SPI.h>
 
 //GPIO Pins Waveshare ESP32-S3-Nano or ESP32-S3-zero
-#define CS_ADC 21   //D10
-#define CS_SD 18  //D9
-#define CLKpin 48   //D13
-#define MISOpin 47  //D12
-#define MOSIpin 38  //D11
+#define PIN_CS_ADC 21   //D10
+#define PIN_CS_SD 18  //D9
+#define PIN_CLK 48   //D13
+#define PIN_MISO 47  //D12
+#define PIN_MOSI 38  //D11
 
-#define ISR_TIMER_PIN 5  //D2
-#define ISR_SOUND_PIN 6  //D3
+#define PIN_ISR_TIMER 5  //D2
+#define PIN_ISR_SOUND 6  //D3
 
-#define BACKLOGSIZE 20
-#define FRONTLOGSIZE 40
-
-//also create directory(?) for each day (can be done using __DATE__)
-#define PATH "/adc_out.txt" //should be changed to something more time-specific
-
-//arrays must be same size as the variable returned from ADCread function
-uint16_t backlog[BACKLOGSIZE];
-uint16_t frontlog[FRONTLOGSIZE];
+#define BACKLOGSIZE 20000
+#define FRONTLOGSIZE 40000
+uint16_t backlog[BACKLOGSIZE]; //must be same size as what ReadADC() returns
+uint16_t frontlog[FRONTLOGSIZE]; //must be same size as what ReadADC() returns
 unsigned int backlogCnt = 0;
 unsigned int frontlogCnt = 0;
 
 //volatile because they are changed by ISR
 volatile bool soundDetected = false;
 volatile bool writeToSD = false;
+
+#define PATH "/adc_out.txt" //should be changed to something more time-specific
 
 void setup() {
   Serial.begin(115200);
@@ -52,23 +49,23 @@ void setup() {
 void loop() {
   if (writeToSD) {
     //order of functions is important here...
-    detachInterrupt(digitalPinToInterrupt(ISR_TIMER_PIN));
-    detachInterrupt(digitalPinToInterrupt(ISR_SOUND_PIN));
-    digitalWrite(CS_ADC, HIGH);
+    detachInterrupt(digitalPinToInterrupt(PIN_ISR_TIMER));
+    detachInterrupt(digitalPinToInterrupt(PIN_ISR_SOUND));
+    digitalWrite(PIN_CS_ADC, HIGH);
     SPI.endTransaction();
-    if(!SD.begin(CS_SD)) {Serial.println("Failed to init SD.");}
-    digitalWrite(CS_SD, LOW);
+    if(!SD.begin(PIN_CS_SD)) {Serial.println("Failed to init SD.");}
+    digitalWrite(PIN_CS_SD, LOW);
 
     Serial.print("Writing to SD card...");
     WriteToSD();
     Serial.println("Successfully written to SD card");
     
-    digitalWrite(CS_SD, HIGH);
+    digitalWrite(PIN_CS_SD, HIGH);
     SPI.beginTransaction(SPISettings(1600000, MSBFIRST, SPI_MODE0));
-    digitalWrite(CS_ADC, LOW);
+    digitalWrite(PIN_CS_ADC, LOW);
     reset();
-    attachInterrupt(digitalPinToInterrupt(ISR_SOUND_PIN), ISR_SOUND, RISING);
-    attachInterrupt(digitalPinToInterrupt(ISR_TIMER_PIN), ISR_TIMER, RISING);
+    attachInterrupt(digitalPinToInterrupt(PIN_ISR_SOUND), ISR_SOUND, RISING);
+    attachInterrupt(digitalPinToInterrupt(PIN_ISR_TIMER), ISR_TIMER, RISING);
   }
 }
 

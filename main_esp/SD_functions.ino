@@ -1,10 +1,10 @@
 void InitSD() {
   //initialise chipselect:
-  pinMode(CS_SD, OUTPUT);
-  digitalWrite(CS_SD, HIGH);
+  pinMode(PIN_CS_SD, OUTPUT);
+  digitalWrite(PIN_CS_SD, HIGH);
 
   //initialise SPI with manually configured pins:
-  SPI.begin(CLKpin, MISOpin, MOSIpin, CS_SD);
+  SPI.begin(PIN_CLK, PIN_MISO, PIN_MOSI, PIN_CS_SD);
 }
 
 void WriteToSD() {

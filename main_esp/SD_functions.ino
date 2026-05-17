@@ -4,7 +4,7 @@ void InitSD() {
   digitalWrite(PIN_CS_SD, HIGH);
 
   //initialise SPI with manually configured pins:
-  SPI.begin(PIN_CLK, PIN_MISO, PIN_MOSI, PIN_CS_SD);
+  spi3.begin(PIN_CLK, PIN_MISO, PIN_MOSI, PIN_CS_SD);
 }
 
 void WriteToSD() {

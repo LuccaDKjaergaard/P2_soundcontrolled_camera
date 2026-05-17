@@ -4,16 +4,16 @@ void InitADC() {
   digitalWrite(PIN_CS_ADC, HIGH);
 
   //initialise SPI with manually configured pins:
-  SPI.begin(PIN_CLK, PIN_MISO, PIN_MOSI, PIN_CS_ADC);
-  SPI.beginTransaction(SPISettings(1600000, MSBFIRST, SPI_MODE0));
+  spi2.begin(PIN_CLK_ADC, PIN_MISO_ADC, PIN_MOSI_ADC, PIN_CS_ADC);
+  spi2.beginTransaction(SPISettings(1600000, MSBFIRST, SPI_MODE0));
 }
 
 uint16_t ReadADC() {
   digitalWrite(PIN_CS_ADC, LOW);
 
   // Read 16 bits (2 x 8 clocks)
-  uint8_t highByte = SPI.transfer(0x00);
-  uint8_t lowByte = SPI.transfer(0x00);
+  uint8_t highByte = spi2.transfer(0x00);
+  uint8_t lowByte = spi2.transfer(0x00);
 
   digitalWrite(PIN_CS_ADC, HIGH);
 

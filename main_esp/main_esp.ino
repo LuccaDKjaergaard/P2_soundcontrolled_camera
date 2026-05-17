@@ -16,12 +16,13 @@
 
 #define BACKLOGSIZE 20000
 #define FRONTLOGSIZE 40000
-uint16_t backlog[BACKLOGSIZE]; //must be same size as what ReadADC() returns
-uint16_t frontlog[FRONTLOGSIZE]; //must be same size as what ReadADC() returns
-unsigned int backlogCnt = 0;
-unsigned int frontlogCnt = 0;
+//volatile because they are changed by ISR:
+volatile uint16_t backlog[BACKLOGSIZE]; //must be same size as what ReadADC() returns
+volatile uint16_t frontlog[FRONTLOGSIZE]; //must be same size as what ReadADC() returns
+volatile unsigned int backlogCnt = 0;
+volatile unsigned int frontlogCnt = 0;
 
-//volatile because they are changed by ISR
+//volatile because they are changed by ISR:
 volatile bool soundDetected = false;
 volatile bool writeToSD = false;
 
@@ -62,6 +63,7 @@ void loop() {
     
     digitalWrite(PIN_CS_SD, HIGH);
     SPI.beginTransaction(SPISettings(1600000, MSBFIRST, SPI_MODE0));
+    //SPI.beginTransaction(SPISettings(1600000, MSBFIRST, SPI_MODE3));
     digitalWrite(PIN_CS_ADC, LOW);
     reset();
     attachInterrupt(digitalPinToInterrupt(PIN_ISR_SOUND), ISR_SOUND, RISING);

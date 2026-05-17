@@ -16,7 +16,6 @@ void ISR_TIMER() {
       frontlogCnt++;
     } else if (frontlogCnt >= FRONTLOGSIZE) {
       writeToSD = true;
-      Serial.println("writeToSD = true");
     }
   } else if (!soundDetected) {
     if(backlogCnt >= BACKLOGSIZE) {

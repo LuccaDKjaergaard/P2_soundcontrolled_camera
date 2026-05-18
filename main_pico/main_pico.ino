@@ -1,6 +1,6 @@
 #include <math.h>
 
-const unsigned int SOUND_THRESHOLD = 900; //analog value for sound detection - may not get below 1023/2 = 550 (rundet op)
+const unsigned int SOUND_THRESHOLD = 700; //analog value for sound detection - may not get below 1023/2 = 550 (rundet op)
 struct MicrophoneTp {
   int pin;
   unsigned int baseline;
@@ -50,9 +50,9 @@ void loop() {
   int analogLeft = 0;
   int analogRight = 0;
   while(!micLeft.detected && !micRight.detected && (millis() - timer < TIME)) {
-    //analogLeft = analogRead(micLeft.pin);
     analogLeft = analogRead(micLeft.pin);
-    //analogRight = analogRead(micRight.pin);
+    analogLeft = analogRead(micLeft.pin);
+    analogRight = analogRead(micRight.pin);
     analogRight = analogRead(micRight.pin);
     unsigned long micro = micros();
 
@@ -61,7 +61,7 @@ void loop() {
       micLeft.detected = HIGH;
       soundState = fromRight;
       Serial.println("Sound is coming from the right!");
-      break;
+      //break;
     }
 
     if(analogRight > SOUND_THRESHOLD) {
@@ -69,7 +69,7 @@ void loop() {
       micRight.detected = HIGH;
       soundState = fromLeft;
       Serial.println("Sound is coming from the left!");
-      break;
+      //break;
     }
   }
 
@@ -92,6 +92,7 @@ void loop() {
   Serial.print("soundAngle: "); Serial.println(soundAngle);
   //UpdateServoPosition(soundAngle);
   Reset();
+  delay(1000);
 }
 
 /*void loop1() {

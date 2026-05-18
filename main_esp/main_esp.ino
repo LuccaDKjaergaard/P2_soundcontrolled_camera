@@ -23,8 +23,8 @@ SPIClass spi3(HSPI); //SD SPI class
 #define PIN_ISR_TIMER 5  //D2
 #define PIN_ISR_SOUND 6  //D3
 
-#define BACKLOGSIZE 2000 //20000
-#define FRONTLOGSIZE 4000 //40000
+#define BACKLOGSIZE 40000 //2 sec
+#define FRONTLOGSIZE 60000 //3 sec
 uint16_t backlog[BACKLOGSIZE]; //must be same size as what ReadADC() returns
 uint16_t frontlog[FRONTLOGSIZE]; //must be same size as what ReadADC() returns
 unsigned int backlogCnt = 0;

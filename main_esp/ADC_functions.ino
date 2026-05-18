@@ -12,8 +12,8 @@ uint16_t ReadADC() {
   digitalWrite(PIN_CS_ADC, LOW);
 
   // Read 16 bits (2 x 8 clocks)
-  uint8_t highByte = spi2.transfer(0x00);
-  uint8_t lowByte = spi2.transfer(0x00);
+  uint8_t highByte = spi2.transfer(0x00); //returns 3 unusable bits + 5 usable
+  uint8_t lowByte = spi2.transfer(0x00); //returns 7 usable bits + 1 unusable
 
   digitalWrite(PIN_CS_ADC, HIGH);
 

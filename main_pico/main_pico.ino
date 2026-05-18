@@ -3,7 +3,6 @@
 const unsigned int SOUND_THRESHOLD = 600; //analog value for sound detection - may not get below 1023/2 = 550 (rundet op)
 const int ARRAY_LENGTH = 2500;
 int soundArrayLeft[ARRAY_LENGTH];
-int soundArrayMiddle[ARRAY_LENGTH];
 int soundArrayRight[ARRAY_LENGTH];
 
 struct MicrophoneTp {
@@ -40,12 +39,12 @@ void setup1() {
 
 void loop() {
   topOfLoop:
+
   //wait for sound on middle mic
   unsigned long counter = 0;
   while(!micMiddle.detected) {
     if(counter >= ARRAY_LENGTH) {counter = 0;}
     soundArrayLeft[counter] = analogRead(micLeft.pin);
-    //soundArrayMiddle[counter] = analogRead(micMiddle.pin);
     soundArrayRight[counter] = analogRead(micRight.pin);
     counter++;
 
@@ -73,16 +72,10 @@ void loop() {
     if(analogLeft > SOUND_THRESHOLD || analogLeft < (1023 - SOUND_THRESHOLD)) {
       micLeft.detectedTime = micro;
       micLeft.detected = HIGH;
-      //soundState = fromRight;
-      //Serial.println("Sound is coming from the right!");
-      //break;
     }
     if(analogRight > SOUND_THRESHOLD || analogRight < (1023 - SOUND_THRESHOLD)) {
       micRight.detectedTime = micro;
       micRight.detected = HIGH;
-      //soundState = fromLeft;
-      //Serial.println("Sound is coming from the left!");
-      //break;
     }
   }
   //if timer ran out:
@@ -120,17 +113,6 @@ void loop() {
   soundState = unknown; //if all else fails
   breakOut:
 
-  /*
-  //if both outer mics were detected (aka SOUND_THRESHOLD is too low)
-  if(micLeft.detected && micRight.detected) {
-    if(analogLeft > analogRight) {
-      soundState = fromLeft;
-    } else if(analogLeft < analogRight) {
-      soundState = fromRight;
-    }
-  }
-  */
-
   int soundAngle = CalculateSoundAngle();
   Serial.print("soundAngle: "); Serial.println(soundAngle);
   //UpdateServoPosition(soundAngle);
@@ -138,13 +120,13 @@ void loop() {
   delay(1000);
 }
 
-/*void loop1() {
+void loop1() {
   digitalWrite(PIN_SERVO, HIGH);
   delayMicroseconds(servoPosition);
   digitalWrite(PIN_SERVO, LOW);
   delay(17);
   delayMicroseconds(3000 - servoPosition);
-}*/
+}
 
 void Reset() {
   micLeft.detected = LOW;
@@ -157,5 +139,4 @@ void Reset() {
   }
 
   Serial.println("All has been reset.");
-  //goto topOfLoop;
 }

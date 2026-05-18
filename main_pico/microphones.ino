@@ -16,7 +16,7 @@ int CalculateSoundAngle() {
 
   switch(soundState) {
     case fromLeft:
-      tdoa = micRight.detectedTime - micMiddle.detectedTime; //can make overflow - if value is negative?
+      tdoa = micRight.detectedTime - micMiddle.detectedTime;
       Serial.print("tdoa: "); Serial.println(tdoa);
       tdoaDistance = SPEED_OF_SOUND * tdoa;
       Serial.print("tdoaDistance: "); Serial.println(tdoaDistance);

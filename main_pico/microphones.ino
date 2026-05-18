@@ -9,9 +9,9 @@ void InitMicrophones() {
 }
 
 int CalculateSoundAngle() {
-  const unsigned int SPEED_OF_SOUND = 343; //m/s = mm/ms = microm/micros
-  const unsigned int MIC_DISTANCE = 150000; //micro m (= 10 cm)
-  unsigned long tdoa, tdoaDistance;
+  const double SPEED_OF_SOUND = 343.0; //m/s = mm/ms = microm/micros
+  const long double MIC_DISTANCE = 150000.0; //micro m (= 10 cm)
+  long double tdoa, tdoaDistance;
   double angleRadians, angleDegrees;
 
   switch(soundState) {
@@ -20,7 +20,7 @@ int CalculateSoundAngle() {
       Serial.print("tdoa: "); Serial.println(tdoa);
       tdoaDistance = SPEED_OF_SOUND * tdoa;
       Serial.print("tdoaDistance: "); Serial.println(tdoaDistance);
-      angleRadians = acos(double(tdoaDistance) / double(MIC_DISTANCE));
+      angleRadians = acos(tdoaDistance / MIC_DISTANCE);
       Serial.print("angleRadians: "); Serial.println(angleRadians); //should be in [0, pi]
       angleDegrees = angleRadians * 180.0 / M_PI;
       return map(int(angleDegrees), 0, 180, 180, 0);
@@ -30,7 +30,7 @@ int CalculateSoundAngle() {
       Serial.print("tdoa: "); Serial.println(tdoa);
       tdoaDistance = SPEED_OF_SOUND * tdoa;
       Serial.print("tdoaDistance: "); Serial.println(tdoaDistance);
-      angleRadians = acos(double(tdoaDistance) / double(MIC_DISTANCE));
+      angleRadians = acos(tdoaDistance / MIC_DISTANCE);
       Serial.print("angleRadians: "); Serial.println(angleRadians); //should be in [0, pi]
       angleDegrees = angleRadians * 180.0 / M_PI;
       return int(angleDegrees);

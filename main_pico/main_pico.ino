@@ -50,25 +50,28 @@ void loop() {
   int analogRight = 0;
   while(!micLeft.detected && !micRight.detected && (millis() - timer < TIME)) {
     analogLeft = analogRead(micLeft.pin);
+    analogLeft = analogRead(micLeft.pin);
+    analogRight = analogRead(micRight.pin);
+    analogRight = analogRead(micRight.pin);
+    unsigned long micro = micros();
+
     if(analogLeft > SOUND_THRESHOLD) {
-      micLeft.detectedTime = micros();
+      micLeft.detectedTime = micro;
       micLeft.detected = HIGH;
       soundState = fromRight;
       Serial.println("Sound is coming from the right!");
-      break;
+      //break;
     }
 
-    analogRight = analogRead(micRight.pin);
     if(analogRight > SOUND_THRESHOLD) {
-      micRight.detectedTime = micros();
+      micRight.detectedTime = micro;
       micRight.detected = HIGH;
       soundState = fromLeft;
       Serial.println("Sound is coming from the left!");
-      break;
+      //break;
     }
   }
 
-  /*
   //if both outer mics were detected (aka SOUND_THRESHOLD is too low)
   if(micLeft.detected && micRight.detected) {
     if(analogLeft > analogRight) {
@@ -77,8 +80,7 @@ void loop() {
       soundState = fromRight;
     }
   }
-  */
-
+  
   if(millis() - timer > TIME) { //if time ran out
     Serial.println("Time ran out.");
     Reset();

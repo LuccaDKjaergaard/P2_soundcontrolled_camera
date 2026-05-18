@@ -9,18 +9,23 @@ void InitMicrophones() {
 }
 
 int CalculateSoundAngle() {
-  const unsigned int SPEED_OF_SOUND = 343; //m/s = mm/ms = microm/micros
-  const unsigned int MIC_DISTANCE = 150000; //micro m (= 10 cm)
-  unsigned long tdoa, tdoaDistance;
+  const double SPEED_OF_SOUND = 343.0; //m/s = mm/ms = microm/micros
+  const double MIC_DISTANCE = 160000.0; //micro m (= 15 cm)
+  double tdoa, tdoaDistance;
   double angleRadians, angleDegrees;
 
   switch(soundState) {
     case fromLeft:
-      tdoa = micRight.detectedTime - micMiddle.detectedTime;
+      tdoa = micRight.detectedTime - micMiddle.detectedTime; //can make overflow - if value is negative?
       Serial.print("tdoa: "); Serial.println(tdoa);
       tdoaDistance = SPEED_OF_SOUND * tdoa;
       Serial.print("tdoaDistance: "); Serial.println(tdoaDistance);
-      angleRadians = acos(double(tdoaDistance) / double(MIC_DISTANCE));
+      if(tdoaDistance > MIC_DISTANCE) {
+        Serial.println("tdoaDistance is too large.");
+        return 135;
+      }
+
+      angleRadians = acos(tdoaDistance / MIC_DISTANCE); //if tdoaDistance > MIC_DISTANCE then angleRadians = inf
       Serial.print("angleRadians: "); Serial.println(angleRadians); //should be in [0, pi]
       angleDegrees = angleRadians * 180.0 / M_PI;
       return map(int(angleDegrees), 0, 180, 180, 0);
@@ -30,7 +35,12 @@ int CalculateSoundAngle() {
       Serial.print("tdoa: "); Serial.println(tdoa);
       tdoaDistance = SPEED_OF_SOUND * tdoa;
       Serial.print("tdoaDistance: "); Serial.println(tdoaDistance);
-      angleRadians = acos(double(tdoaDistance) / double(MIC_DISTANCE));
+      if(tdoaDistance > MIC_DISTANCE) {
+        Serial.println("tdoaDistance is too large.");
+        return 45;
+      }
+
+      angleRadians = acos(tdoaDistance / MIC_DISTANCE); //if tdoaDistance > MIC_DISTANCE then angleRadians = inf
       Serial.print("angleRadians: "); Serial.println(angleRadians); //should be in [0, pi]
       angleDegrees = angleRadians * 180.0 / M_PI;
       return int(angleDegrees);

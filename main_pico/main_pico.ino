@@ -1,6 +1,6 @@
 #include <math.h>
 
-const unsigned int SOUND_THRESHOLD = 600; //analog value for sound detection - may not get below 1023/2 = 550 (rundet op)
+const unsigned int SOUND_THRESHOLD = 700; //analog value for sound detection - may not get below 1023/2 = 550 (rundet op)
 const int ARRAY_LENGTH = 2500;
 int soundArrayLeft[ARRAY_LENGTH];
 int soundArrayRight[ARRAY_LENGTH];
@@ -120,7 +120,7 @@ void loop() {
   Serial.print("soundAngle: "); Serial.println(soundAngle);
   UpdateServoPosition(soundAngle);
   Reset();
-  delay(1000);
+  delay(2000);
 }
 
 void loop1() {

@@ -20,6 +20,8 @@ enum SoundStateTp {
 };
 enum SoundStateTp soundState = unknown;
 
+const int PIN_INTERRUPT = 2;
+
 //servo:
 const int PIN_SERVO = 3;
 int servoPosition;
@@ -51,6 +53,7 @@ void loop() {
     if(analogRead(micMiddle.pin) > SOUND_THRESHOLD || analogRead(micMiddle.pin) < (1023 - SOUND_THRESHOLD)) {
       micMiddle.detectedTime = micros();
       micMiddle.detected = HIGH;
+      digitalWrite(PIN_INTERRUPT, HIGH);
       Serial.println("Sound detected!");
     }
   }
@@ -129,6 +132,7 @@ void loop1() {
 }
 
 void Reset() {
+  digitalWrite(PIN_INTERRUPT, LOW);
   micLeft.detected = LOW;
   micMiddle.detected = LOW;
   micRight.detected = LOW;

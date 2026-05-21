@@ -6,6 +6,8 @@ void InitMicrophones() {
   pinMode(micLeft.pin, INPUT);
   pinMode(micMiddle.pin, INPUT);
   pinMode(micRight.pin, INPUT);
+  pinMode(PIN_INTERRUPT, OUTPUT);
+  digitalWrite(PIN_INTERRUPT, LOW);
 }
 
 int CalculateSoundAngle() {

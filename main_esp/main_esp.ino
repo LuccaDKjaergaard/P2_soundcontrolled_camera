@@ -4,18 +4,18 @@
 
 #include <SPI.h>
 
-//Split up the 2 possible SPI connections
+//Split up the 2 possible SPI connections:
 SPIClass spi2(FSPI); //ADC SPI class
 SPIClass spi3(HSPI); //SD SPI class
 
-//GPIO Pins Waveshare ESP32-S3-Nano or ESP32-S3-zero
-//SD card
-#define PIN_CS_SD 21   //D10
-#define PIN_CLK 48   //D13
-#define PIN_MISO 47  //D12
-#define PIN_MOSI 38  //D11
-//MCP3201-C
-#define PIN_CS_ADC 18  //D9
+//GPIO Pins Waveshare ESP32-S3-Nano
+//SD card:
+#define PIN_CS_SD 21 //D10
+#define PIN_CLK 48 //D13
+#define PIN_MISO 47 //D12
+#define PIN_MOSI 38 //D11
+//MCP3201-C:
+#define PIN_CS_ADC 18 //D9
 #define PIN_MISO_ADC 17 //D8
 #define PIN_CLK_ADC 10 //D7
 #define PIN_MOSI_ADC 9 //
@@ -34,16 +34,14 @@ unsigned int frontlogCnt = 0;
 volatile bool soundDetected = false;
 volatile bool writeToSD = false;
 
-#define PATH "/adc_out.txt" //should be changed to something more time-specific
+#define PATH "/adc_out.txt" //could be changed to something more time-specific
 
 void setup() {
   Serial.begin(115200);
   while (!Serial); //wait for serial
 
-  //Serial.println("Wait for setup...");
   InitSD();
   InitADC();
-  //Serial.println("Setup done!");
 
   Serial.print("Size of backlog: ");
   Serial.print(sizeof(backlog));
@@ -57,7 +55,6 @@ void setup() {
 
 void loop() {
   if (writeToSD) {
-    //order of functions is important here...
     detachInterrupt(digitalPinToInterrupt(PIN_ISR_TIMER));
     detachInterrupt(digitalPinToInterrupt(PIN_ISR_SOUND));
     digitalWrite(PIN_CS_ADC, HIGH);

@@ -3,7 +3,7 @@ void InitServo() {
   UpdateServoPosition(90); //place servo in middle
 }
 
-//convert angle to servo signal length
+//convert angle to servo signal length:
 void UpdateServoPosition(int angle) {
   int valueMin = 400;
   int valueMax = 2400;

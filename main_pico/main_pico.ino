@@ -1,6 +1,6 @@
 #include <math.h>
 
-const unsigned int SOUND_THRESHOLD = 700; //analog value for sound detection - may not get below 1023/2 = 550 (rundet op)
+const unsigned int SOUND_THRESHOLD = 700; //analog value for sound detection
 const int ARRAY_LENGTH = 2500;
 int soundArrayLeft[ARRAY_LENGTH];
 int soundArrayRight[ARRAY_LENGTH];
@@ -65,7 +65,7 @@ void loop() {
   int analogRight = 0;
   unsigned long micro;
   //wait for sound detection on both mics or time runs out
-  while((!micLeft.detected || !micRight.detected) && (millis() - timer < TIMER)) { //note: er timer fomuleret rigtigt?
+  while((!micLeft.detected || !micRight.detected) && (millis() - timer < TIMER)) {
     micro = micros();
     analogLeft = analogRead(micLeft.pin);
     analogLeft = analogRead(micLeft.pin);

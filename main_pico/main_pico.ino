@@ -24,7 +24,7 @@ const int PIN_INTERRUPT = 2;
 
 //servo:
 const int PIN_SERVO = 3;
-int servoPosition;
+volatile int servoPosition; //volatile because it is accessed by both loops
 
 void setup() {
   Serial.begin(115200);
@@ -118,7 +118,7 @@ void loop() {
 
   int soundAngle = CalculateSoundAngle();
   Serial.print("soundAngle: "); Serial.println(soundAngle);
-  //UpdateServoPosition(soundAngle);
+  UpdateServoPosition(soundAngle);
   Reset();
   delay(1000);
 }

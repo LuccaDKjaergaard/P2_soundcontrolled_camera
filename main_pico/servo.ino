@@ -7,5 +7,5 @@ void InitServo() {
 void UpdateServoPosition(int angle) {
   int valueMin = 400;
   int valueMax = 2400;
-  int servoPosition = map(angle, 0, 180, valueMin, valueMax); //update global variable
+  servoPosition = map(angle, 0, 180, valueMin, valueMax); //update global variable
 }

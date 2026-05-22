@@ -52,8 +52,8 @@ void loop() {
 
     if(analogRead(micMiddle.pin) > SOUND_THRESHOLD || analogRead(micMiddle.pin) < (1023 - SOUND_THRESHOLD)) {
       micMiddle.detectedTime = micros();
-      micMiddle.detected = HIGH;
       digitalWrite(PIN_INTERRUPT, HIGH);
+      micMiddle.detected = HIGH;
       Serial.println("Sound detected!");
     }
   }

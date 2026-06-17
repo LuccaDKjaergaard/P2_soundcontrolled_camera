@@ -12,7 +12,8 @@ void ISR_SOUND() {
 void ISR_TIMER() {
   if (soundDetected) {
     if (frontlogCnt < FRONTLOGSIZE) {
-      frontlog[frontlogCnt] = ReadADC();
+      //frontlog[frontlogCnt] = ReadADC();
+      frontlog[frontlogCnt] = analogRead(micMiddle.pin);
       frontlogCnt++;
     } else if (frontlogCnt >= FRONTLOGSIZE) {
       writeToSD = true;
@@ -22,7 +23,8 @@ void ISR_TIMER() {
     if(backlogCnt >= BACKLOGSIZE) {
       backlogCnt = 0;
     }
-    backlog[backlogCnt] = ReadADC();
+    //backlog[backlogCnt] = ReadADC();
+    backlog[backlogCnt] = analogRead(micMiddle.pin);
     backlogCnt++;
   }
 }

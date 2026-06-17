@@ -48,7 +48,7 @@ volatile int servoPosition; //volatile because it is accessed by both loops
 #define FRONTLOGSIZE 60000 //3 sec
 uint16_t backlog[BACKLOGSIZE]; //must be same size as what ReadADC() returns
 uint16_t frontlog[FRONTLOGSIZE]; //must be same size as what ReadADC() returns
-unsigned int backlogCnt = 0;
+uint8_t backlogCnt = 0;
 unsigned int frontlogCnt = 0;
 
 //volatile because they are changed by ISR
@@ -65,7 +65,7 @@ void setup() {
 
   InitMicrophones();
   InitSD();
-  InitADC();
+  //InitADC();
 
   Serial.print("Size of backlog: ");
   Serial.print(sizeof(backlog));
@@ -168,8 +168,8 @@ void loop() {
     if(writeToSD) {
       detachInterrupt(digitalPinToInterrupt(PIN_ISR_TIMER));
       detachInterrupt(digitalPinToInterrupt(PIN_ISR_SOUND));
-      digitalWrite(ADC_CS, HIGH); //deselect
-      SPI1.endTransaction();
+      //digitalWrite(ADC_CS, HIGH); //deselect
+      //SPI1.endTransaction();
       //if(!SD.begin(SD_CS, SPI)) {Serial.println("Failed to init SD.");}
       digitalWrite(SD_CS, LOW); //select
 
@@ -178,8 +178,8 @@ void loop() {
       Serial.println("Successfully written to SD card");
       
       digitalWrite(SD_CS, HIGH); //deselect
-      SPI1.beginTransaction(SPISettings(1600000, MSBFIRST, SPI_MODE0));
-      digitalWrite(ADC_CS, LOW); //select
+      //SPI1.beginTransaction(SPISettings(1600000, MSBFIRST, SPI_MODE0));
+      //digitalWrite(ADC_CS, LOW); //select
       ResetSD();
       attachInterrupt(digitalPinToInterrupt(PIN_ISR_SOUND), ISR_SOUND, RISING);
       attachInterrupt(digitalPinToInterrupt(PIN_ISR_TIMER), ISR_TIMER, RISING);

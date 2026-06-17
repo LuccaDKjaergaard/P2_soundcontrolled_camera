@@ -2,7 +2,7 @@
 #include <SD.h>
 #include <SPI.h>
 
-const unsigned int SOUND_THRESHOLD = 700; //analog value for sound detection
+const unsigned int SOUND_THRESHOLD = 750; //analog value for sound detection
 const int ARRAY_LENGTH = 2500;
 int soundArrayLeft[ARRAY_LENGTH];
 int soundArrayRight[ARRAY_LENGTH];
@@ -35,11 +35,6 @@ volatile int servoPosition; //volatile because it is accessed by both loops
 #define SD_MOSI 19
 #define SD_MISO 16
 #define SD_CS 17
-//SPI1 - ADC
-#define ADC_SCK 10
-//#define ADC_MOSI 11
-#define ADC_MISO 12
-#define ADC_CS 13
 
 #define PIN_ISR_TIMER 5
 #define PIN_ISR_SOUND 6
@@ -65,7 +60,6 @@ void setup() {
 
   InitMicrophones();
   InitSD();
-  InitADC();
 
   Serial.print("Size of backlog: ");
   Serial.print(sizeof(backlog));
@@ -168,8 +162,6 @@ void loop() {
     if(writeToSD) {
       detachInterrupt(digitalPinToInterrupt(PIN_ISR_TIMER));
       detachInterrupt(digitalPinToInterrupt(PIN_ISR_SOUND));
-      digitalWrite(ADC_CS, HIGH); //deselect
-      SPI1.endTransaction();
       //if(!SD.begin(SD_CS, SPI)) {Serial.println("Failed to init SD.");}
       digitalWrite(SD_CS, LOW); //select
 
@@ -178,8 +170,6 @@ void loop() {
       Serial.println("Successfully written to SD card");
       
       digitalWrite(SD_CS, HIGH); //deselect
-      SPI1.beginTransaction(SPISettings(1600000, MSBFIRST, SPI_MODE0));
-      digitalWrite(ADC_CS, LOW); //select
       ResetSD();
       attachInterrupt(digitalPinToInterrupt(PIN_ISR_SOUND), ISR_SOUND, RISING);
       attachInterrupt(digitalPinToInterrupt(PIN_ISR_TIMER), ISR_TIMER, RISING);

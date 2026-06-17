@@ -27,10 +27,12 @@ void InitSD() {
   file.close();
 }*/
 
+uint8_t buf1[sizeof(backlogCnt)], buf2[sizeof(backlog)], buf3[sizeof(frontlog)];
+
 void WriteToSD() {
   // Allocate a buffer large enough for all your data
   //const size_t bufSize = sizeof(backlogCnt) + sizeof(backlog) + sizeof(frontlog);
-  uint8_t buf1[sizeof(backlogCnt)], buf2[sizeof(backlog)], buf3[sizeof(frontlog)];
+  //uint8_t buf1[sizeof(backlogCnt)], buf2[sizeof(backlog)], buf3[sizeof(frontlog)];
   //size_t offset = 0;
 
   // Copy data into buffer
@@ -46,6 +48,7 @@ void WriteToSD() {
   file.write(buf2, sizeof(buf2));
   file.write(buf3, sizeof(buf3));
   file.close();
+  Serial.println("File closed.");
 }
 
 /*void WriteToSD() {

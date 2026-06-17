@@ -178,6 +178,7 @@ void loop() {
       Serial.println("Successfully written to SD card");
       
       digitalWrite(SD_CS, HIGH); //deselect
+      Serial.println("SD_CS sat HIGH.");
       //SPI1.beginTransaction(SPISettings(1600000, MSBFIRST, SPI_MODE0));
       //digitalWrite(ADC_CS, LOW); //select
       ResetSD();

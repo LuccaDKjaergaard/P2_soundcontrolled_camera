@@ -64,13 +64,13 @@ void loop() {
     digitalWrite(SD_CS, HIGH); //deselct
     SPI1.beginTransaction(SPISettings(1600000, MSBFIRST, SPI_MODE0));
     digitalWrite(ADC_CS, LOW); //select
-    Reset();
+    ResetSD();
     attachInterrupt(digitalPinToInterrupt(PIN_ISR_SOUND), ISR_SOUND, RISING);
     attachInterrupt(digitalPinToInterrupt(PIN_ISR_TIMER), ISR_TIMER, RISING);
   }
 }
 
-void Reset() {
+void ResetSD() {
   frontlogCnt = 0;
   backlogCnt = 0;
   for (int i = 0; i < BACKLOGSIZE; i++) {

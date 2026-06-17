@@ -43,7 +43,7 @@ volatile int servoPosition; //volatile because it is accessed by both loops
 #define FRONTLOGSIZE 60000 //3 sec
 uint16_t backlog[BACKLOGSIZE]; //must be same size as what ReadADC() returns
 uint16_t frontlog[FRONTLOGSIZE]; //must be same size as what ReadADC() returns
-unsigned int backlogCnt = 0;
+uint8_t backlogCnt = 0;
 unsigned int frontlogCnt = 0;
 
 //volatile because they are changed by ISR

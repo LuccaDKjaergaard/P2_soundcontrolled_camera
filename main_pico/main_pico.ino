@@ -51,8 +51,8 @@ unsigned int frontlogCnt = 0; //must be at least FRONTLOGSIZE
 volatile bool soundDetected = false;
 volatile bool writeToSD = false;
 
-SdFat  sd;   // SdFat filesystem object
-SdFile file; // File object
+SdFat sd; //init SD-card
+SdFile file; //init file
 #define PATH "/adc_out.csv" //could be changed to something more time-specific
 
 void setup() {
@@ -158,22 +158,20 @@ void loop() {
   int soundAngle = CalculateSoundAngle();
   Serial.print("soundAngle: "); Serial.println(soundAngle);
   UpdateServoPosition(soundAngle);
-  Reset();
   
   Serial.println("Waiting for frontlog...");
   while(true) {
     if(writeToSD) {
       detachInterrupt(digitalPinToInterrupt(PIN_ISR_TIMER));
       detachInterrupt(digitalPinToInterrupt(PIN_ISR_SOUND));
-      //if(!SD.begin(SD_CS, SPI)) {Serial.println("Failed to init SD.");}
-      digitalWrite(SD_CS, LOW); //select
 
+      digitalWrite(SD_CS, LOW); //select
       Serial.print("Writing to SD card...");
       WriteToSD();
       Serial.println("Successfully written to SD card");
-      
       digitalWrite(SD_CS, HIGH); //deselect
-      ResetSD();
+
+      Reset();
       attachInterrupt(digitalPinToInterrupt(PIN_ISR_SOUND), ISR_SOUND, RISING);
       attachInterrupt(digitalPinToInterrupt(PIN_ISR_TIMER), ISR_TIMER, RISING);
       break;
@@ -191,6 +189,7 @@ void loop1() {
 }
 
 void Reset() {
+  //reset mic array stuffs:
   digitalWrite(PIN_INTERRUPT, LOW);
   micLeft.detected = LOW;
   micMiddle.detected = LOW;
@@ -201,10 +200,7 @@ void Reset() {
     soundArrayRight[i] = 0;
   }
 
-  Serial.println("All has been reset.");
-}
-
-void ResetSD() {
+  //reset SD stuffs:
   frontlogCnt = 0;
   backlogCnt = 0;
   for (int i = 0; i < BACKLOGSIZE; i++) {
@@ -215,4 +211,6 @@ void ResetSD() {
   }
   soundDetected = false;
   writeToSD = false;
+
+  Serial.println("All has been reset.");
 }

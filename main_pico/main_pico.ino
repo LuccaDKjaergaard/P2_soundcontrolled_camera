@@ -35,9 +35,7 @@ volatile int servoPosition; //volatile because it is accessed by both loops
 #define SD_CS 17
 
 //ISR's:
-#define PIN_INTERRUPT 2
 #define PIN_ISR_TIMER 5
-#define PIN_ISR_SOUND 6
 
 //Sound logging:
 #define BACKLOGSIZE 40000 //2 seconds
@@ -91,7 +89,7 @@ void loop() {
 
     if(analogRead(micMiddle.pin) > SOUND_THRESHOLD || analogRead(micMiddle.pin) < (1023 - SOUND_THRESHOLD)) {
       micMiddle.detectedTime = micros();
-      digitalWrite(PIN_INTERRUPT, HIGH);
+      soundDetected = true;
       micMiddle.detected = HIGH;
       Serial.println("Sound detected!");
     }
@@ -163,7 +161,6 @@ void loop() {
   while(true) {
     if(writeToSD) {
       detachInterrupt(digitalPinToInterrupt(PIN_ISR_TIMER));
-      detachInterrupt(digitalPinToInterrupt(PIN_ISR_SOUND));
 
       digitalWrite(SD_CS, LOW); //select
       Serial.print("Writing to SD card...");
@@ -172,7 +169,6 @@ void loop() {
       digitalWrite(SD_CS, HIGH); //deselect
 
       Reset();
-      attachInterrupt(digitalPinToInterrupt(PIN_ISR_SOUND), ISR_SOUND, RISING);
       attachInterrupt(digitalPinToInterrupt(PIN_ISR_TIMER), ISR_TIMER, RISING);
       break;
     }
@@ -190,7 +186,6 @@ void loop1() {
 
 void Reset() {
   //reset mic array stuffs:
-  digitalWrite(PIN_INTERRUPT, LOW);
   micLeft.detected = LOW;
   micMiddle.detected = LOW;
   micRight.detected = LOW;

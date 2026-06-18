@@ -1,12 +1,6 @@
 void InitISR() {
-  pinMode(PIN_ISR_SOUND, INPUT);
   pinMode(PIN_ISR_TIMER, INPUT);
-  attachInterrupt(digitalPinToInterrupt(PIN_ISR_SOUND), ISR_SOUND, RISING);
   attachInterrupt(digitalPinToInterrupt(PIN_ISR_TIMER), ISR_TIMER, RISING);
-}
-
-void ISR_SOUND() {
-  soundDetected = true;
 }
 
 void ISR_TIMER() {

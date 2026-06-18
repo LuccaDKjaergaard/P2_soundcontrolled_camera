@@ -177,11 +177,16 @@ void loop() {
 }
 
 void loop1() {
-  digitalWrite(PIN_SERVO, HIGH);
-  delayMicroseconds(servoPosition);
-  digitalWrite(PIN_SERVO, LOW);
-  delay(17);
-  delayMicroseconds(3000 - servoPosition);
+  unsigned long lastTime = millis();
+  const int PWM_TIME = 20; //50Hz
+  while(1) {
+    if(millis() - lastTime > PWM_TIME) { //have 20ms passed?
+      lastTime = millis(); //update time
+      digitalWrite(PIN_SERVO, HIGH);
+      delayMicroseconds(servoPosition);
+      digitalWrite(PIN_SERVO, LOW);
+    }
+  }
 }
 
 void Reset() {

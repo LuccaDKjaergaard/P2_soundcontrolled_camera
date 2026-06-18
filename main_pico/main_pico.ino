@@ -2,7 +2,8 @@
 #include <SD.h>
 #include <SPI.h>
 
-const unsigned int SOUND_THRESHOLD = 750; //analog value for sound detection
+//Microphone array stuffs:
+const unsigned int SOUND_THRESHOLD = 700; //analog value for sound detection
 const int ARRAY_LENGTH = 2500;
 int soundArrayLeft[ARRAY_LENGTH];
 int soundArrayRight[ARRAY_LENGTH];
@@ -22,29 +23,28 @@ enum SoundStateTp {
 };
 enum SoundStateTp soundState = unknown;
 
-const int PIN_INTERRUPT = 2;
-
 //servo:
 const int PIN_SERVO = 3;
 volatile int servoPosition; //volatile because it is accessed by both loops
 
-//ADC & SD:
-//SPI definitions:
-//SPI0 - SD card
+//SPI0 definitions for SD-card:
 #define SD_SCK 18
 #define SD_MOSI 19
 #define SD_MISO 16
 #define SD_CS 17
 
+//ISR's:
+#define PIN_INTERRUPT 2
 #define PIN_ISR_TIMER 5
 #define PIN_ISR_SOUND 6
 
-#define BACKLOGSIZE 40000 //2 sec
-#define FRONTLOGSIZE 60000 //3 sec
-uint16_t backlog[BACKLOGSIZE]; //must be same size as what ReadADC() returns
-uint16_t frontlog[FRONTLOGSIZE]; //must be same size as what ReadADC() returns
-uint8_t backlogCnt = 0;
-unsigned int frontlogCnt = 0;
+//Sound logging:
+#define BACKLOGSIZE 40000 //2 seconds
+#define FRONTLOGSIZE 60000 //3 seconds
+uint16_t backlog[BACKLOGSIZE]; //must be at least 10 bits
+uint16_t frontlog[FRONTLOGSIZE]; //must be at least 10 bits
+unsigned int backlogCnt = 0; //must be at least BACKLOGSIZE
+unsigned int frontlogCnt = 0; //must be at least FRONTLOGSIZE
 
 //volatile because they are changed by ISR
 volatile bool soundDetected = false;

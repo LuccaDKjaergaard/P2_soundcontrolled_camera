@@ -2,14 +2,12 @@ void InitSD() {
   //initialise SPI:
   pinMode(SD_CS, OUTPUT);
   digitalWrite(SD_CS, HIGH); //deselect
+
   SPI.setRX(SD_MISO);
   SPI.setTX(SD_MOSI);
   SPI.setSCK(SD_SCK);
   //SPI.begin();
   if(!SD.begin(SD_CS, SPI)) {Serial.println("Failed to init SD.");}
-
-  //initialise SPI with manually configured pins:
-  //spi3.begin(PIN_CLK, PIN_MISO, PIN_MOSI, PIN_CS_SD);
 
   Serial.println("SPI0 (SD card) ready.");
 }

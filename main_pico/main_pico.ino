@@ -1,9 +1,10 @@
 #include <math.h>
 #include <SD.h>
+#include <SdFat.h>
 #include <SPI.h>
 
 //Microphone array stuffs:
-const unsigned int SOUND_THRESHOLD = 700; //analog value for sound detection
+const unsigned int SOUND_THRESHOLD = 750; //analog value for sound detection
 const int ARRAY_LENGTH = 2500;
 int soundArrayLeft[ARRAY_LENGTH];
 int soundArrayRight[ARRAY_LENGTH];
@@ -50,7 +51,9 @@ unsigned int frontlogCnt = 0; //must be at least FRONTLOGSIZE
 volatile bool soundDetected = false;
 volatile bool writeToSD = false;
 
-#define PATH "/adc_out.bin" //could be changed to something more time-specific
+SdFat  sd;   // SdFat filesystem object
+SdFile file; // File object
+#define PATH "/adc_out.csv" //could be changed to something more time-specific
 
 void setup() {
   Serial.begin(115200);
